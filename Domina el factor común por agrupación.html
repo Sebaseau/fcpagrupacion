@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Domina el factor común por agrupación</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3fb;--card:#fff;--ink:#241b3d;--mute:#6a6285;--navy:#4a2fa0;--gold:#b86a00;--goldbg:#fff1d6;--green:#0b7a75;--greenbg:#dcf4f1;--red:#c2334d;--redbg:#fde3e8;--line:#e2dcf0;--sh:0 6px 22px rgba(74,47,160,.10);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150f27;--card:#211838;--ink:#f1edfb;--mute:#b3aacf;--navy:#b7a2ff;--gold:#ffc266;--goldbg:#3b2b12;--green:#5fdad2;--greenbg:#12332f;--red:#ff8fa3;--redbg:#40192a;--line:#362a58;--sh:none}}
+:root[data-theme="dark"]{--bg:#150f27;--card:#211838;--ink:#f1edfb;--mute:#b3aacf;--navy:#b7a2ff;--gold:#ffc266;--goldbg:#3b2b12;--green:#5fdad2;--greenbg:#12332f;--red:#ff8fa3;--redbg:#40192a;--line:#362a58;--sh:none}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 Outfit,system-ui,sans-serif}
+h1,h2,h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;line-height:1.15;margin:0 0 .5em}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+.hero{padding:60px 0 54px;background:radial-gradient(circle at 85% 0%,#f2a54144 0,transparent 45%),radial-gradient(circle at 0% 100%,#1fb7ae40 0,transparent 50%),linear-gradient(135deg,#efe9ff,#f8f5ff);color:#241b3d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:radial-gradient(circle at 85% 0%,#f2a54130 0,transparent 45%),radial-gradient(circle at 0% 100%,#1fb7ae30 0,transparent 50%),linear-gradient(135deg,#1d1440,#150f27);color:#f1edfb}}
+.hero h1{font-size:clamp(2.2rem,7vw,3.6rem);color:var(--navy);max-width:13em}
+.hero p{color:var(--mute);max-width:34em;font-size:1.05rem}
+.formula{margin-top:30px;background:var(--card);border:2px solid var(--navy);border-radius:20px;box-shadow:8px 8px 0 #f2a541;padding:22px 24px;font-family:"DM Serif Display",Georgia,serif;font-size:clamp(1.1rem,4vw,1.8rem);overflow-x:auto;white-space:nowrap;color:var(--ink)}
+.formula .g{color:var(--gold)}.formula .v{color:var(--green)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:9px 20px}
+nav a{white-space:nowrap;text-decoration:none;color:#fff;font-weight:600;font-size:.9rem;padding:6px 14px;border-radius:99px;opacity:.85}
+nav a:hover,nav a:focus-visible{background:#fff;color:#4a2fa0;opacity:1;outline:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) nav{background:#2b1d5c}}
+section{padding:50px 0 6px}
+h2{font-size:2rem;color:var(--navy);display:flex;align-items:center;gap:14px}
+h2 .n{flex:none;display:grid;place-items:center;width:2.1rem;height:2.1rem;border-radius:10px;background:linear-gradient(135deg,#f2a541,#e6803a);color:#fff;font:700 1rem Outfit,sans-serif;transform:rotate(-6deg)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 22px;margin:16px 0;box-shadow:var(--sh)}
+.math{font-family:"DM Serif Display",Georgia,serif;font-size:1.25rem;overflow-x:auto}
+.key{background:var(--goldbg);border-color:transparent;border-left:6px solid #f2a541}
+.ok{background:var(--greenbg);border-color:transparent;border-left:6px solid var(--green)}
+.bad{background:var(--redbg);border-color:transparent;border-left:6px solid var(--red)}
+.g{color:var(--gold);font-weight:700}.v{color:var(--green);font-weight:700}.r{color:var(--red);font-weight:700}.b{color:var(--navy);font-weight:700}
+ol.steps{list-style:none;counter-reset:s;padding:0}
+ol.steps li{counter-increment:s;position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px 14px 62px;margin:10px 0;box-shadow:var(--sh)}
+ol.steps li::before{content:counter(s);position:absolute;left:14px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--navy);color:var(--card);display:grid;place-items:center;font-weight:700}
+.ex{border-top:5px solid var(--green)}
+.ex h3{font-size:1.35rem;color:var(--green)}
+.ex .line{padding:7px 0;border-bottom:1px dotted var(--line)}
+.ex .line:last-child{border-bottom:0}
+.q{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:16px 0;box-shadow:var(--sh)}
+.q button{display:block;width:100%;text-align:left;font:inherit;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 14px;margin:8px 0;cursor:pointer}
+.q button:hover{border-color:var(--navy)}
+.q button.right{background:var(--greenbg);border-color:var(--green)}
+.q button.wrong{background:var(--redbg);border-color:var(--red)}
+button:focus-visible{outline:3px solid #f2a541;outline-offset:2px}
+.fb{min-height:1.4em;font-weight:700;margin-top:6px}
+.score{font-family:"DM Serif Display",Georgia,serif;font-size:1.5rem;color:var(--navy)}
+ul{padding-left:1.2em}
+footer{margin-top:64px;padding:30px 0;text-align:center;color:#fff;background:var(--navy);font-size:.95rem}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) footer{background:#2b1d5c}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><h1>Factoriza como un experto: factor común por agrupación</h1><p>Una ruta corta y clara: entiendes la teoría desde cero, aprendes el método, lo ves resuelto y lo pones a prueba.</p>
+<div class="formula" aria-label="ax más by más ay más bx es igual a x por a más b más y por a más b, igual a a más b por x más y">ax + by + ay + bx = <span class="g">x(a + b)</span> + <span class="v">y(a + b)</span> = (a + b)(x + y)</div>
+</div></header>
+
+<nav><div class="wrap"><a href="#teoria">Teoría</a><a href="#idea">La idea</a><a href="#metodo">El método</a><a href="#ejemplos">Ejemplos</a><a href="#errores">Errores</a><a href="#quiz">Mini examen</a></div></nav>
+
+<main class="wrap">
+<section id="teoria">
+<h2><span class="n">1</span>Teoría fácil: ¿qué es factorizar?</h2>
+<p><b>Factorizar</b> es escribir una suma como una <b>multiplicación</b>. Es el camino de regreso de multiplicar. Por ejemplo, 2·(x + 3) = 2x + 6, así que 2x + 6 se factoriza como 2(x + 3).</p>
+<p>El <b>factor común</b> es lo que se repite en todos los términos. En 6x + 9, el 3 está “escondido” en ambos (6 = 3·2 y 9 = 3·3). Lo sacamos afuera y lo que sobra queda dentro del paréntesis:</p>
+<div class="box math">6x + 9 = <span class="g">3</span>(2x + 3)</div>
+<p>Piensa en una bolsa con objetos repetidos: sacas lo que se repite y lo pones fuera de la bolsa.</p>
+<div class="box key"><b>Regla de oro:</b> factor común es la propiedad distributiva a(b + c) = ab + ac, pero al revés.</div>
+<div class="box"><b>Palabras que vas a usar</b><ul>
+<li><b>Término:</b> cada parte de una suma o resta. En 3m² − 6mn + 4m − 8n hay 4 términos.</li>
+<li><b>Binomio:</b> algo con dos términos, como (m − 2n).</li>
+<li><b>Agrupar:</b> juntar términos en parejas para trabajar con ellos.</li></ul></div>
+</section>
+
+<section id="idea">
+<h2><span class="n">2</span>La idea clave: agrupar en parejas</h2>
+<p>Mira <span class="math">ax + bx + ay + by</span>. Tiene 4 términos y <b>no hay una letra que esté en los cuatro</b>, así que no puedes sacar un factor común de todo. Pero sí puedes armar parejas:</p>
+<div class="box math">(<span class="g">ax + bx</span>) + (<span class="v">ay + by</span>)</div>
+<p>En la primera pareja se repite x, y en la segunda se repite y:</p>
+<div class="box math"><span class="g">x(a + b)</span> + <span class="v">y(a + b)</span></div>
+<p>Y ahora la sorpresa: <b>(a + b) se repite en las dos partes</b>. Ese paréntesis es el nuevo factor común. Lo sacamos:</p>
+<div class="box key"><b>Fórmula que debes memorizar</b>
+<div class="math" style="margin-top:8px">ax + by + ay + bx = x(a + b) + y(a + b) = (a + b)(x + y)</div></div>
+<p>Nota: en la fórmula los términos vienen mezclados (ax, by, ay, bx). Solo hay que <b>reordenarlos</b> para que los que comparten letra queden juntos.</p>
+</section>
+
+<section id="metodo">
+<h2><span class="n">3</span>El método en 5 pasos</h2>
+<ol class="steps">
+<li><b>Cuenta y ordena:</b> confirma que hay 4 términos y ordénalos para que los parecidos queden juntos.</li>
+<li><b>Agrupa</b> en dos parejas que compartan algo (una letra o un número).</li>
+<li><b>Saca el factor común</b> de cada pareja por separado.</li>
+<li><b>Revisa los paréntesis:</b> deben quedar <i>iguales</i>. Si no, reordena o cambia el signo del factor.</li>
+<li><b>Saca el paréntesis repetido</b> como factor común. La respuesta es (paréntesis)(lo que sacaste).</li>
+</ol>
+<div class="box ok"><b>¿Cómo lo reconozco?</b> Tiene 4 términos y ningún factor común a todos.</div>
+<div class="box key"><b>Truco con signos:</b> si la segunda pareja empieza con signo negativo, saca el factor <b>negativo</b>. Así los signos de adentro cambian y el paréntesis sale igual al primero.</div>
+</section>
+
+<section id="ejemplos">
+<h2><span class="n">4</span>Ejemplos resueltos paso a paso</h2>
+
+<div class="box ex"><h3>Ejemplo 1 (el más sencillo): 5x + 5y + mx + my</h3>
+<div class="line"><b>Agrupa:</b> (5x + 5y) + (mx + my)</div>
+<div class="line"><b>Factor común de cada pareja:</b> <span class="g">5(x + y)</span> + <span class="v">m(x + y)</span></div>
+<div class="line"><b>Paréntesis repetido:</b> (x + y)</div>
+<div class="line"><b class="v">Respuesta:</b> (x + y)(5 + m)</div></div>
+
+<div class="box ex"><h3>Ejemplo 2 (el de tu cuaderno): 3m² − 6mn + 4m − 8n</h3>
+<div class="line"><b>Agrupa:</b> (3m² − 6mn) + (4m − 8n)</div>
+<div class="line"><b>Primera pareja:</b> factor común 3m → <span class="g">3m(m − 2n)</span></div>
+<div class="line"><b>Segunda pareja:</b> factor común 4 → <span class="v">4(m − 2n)</span></div>
+<div class="line"><b>Paréntesis repetido:</b> (m − 2n)</div>
+<div class="line"><b class="v">Respuesta:</b> (m − 2n)(3m + 4)</div>
+<div class="line"><b>Comprobación:</b> (m − 2n)(3m + 4) = 3m² + 4m − 6mn − 8n ✔</div></div>
+
+<div class="box ex"><h3>Ejemplo 3 (términos mezclados): 2ax + 3by + 2ay + 3bx</h3>
+<div class="line"><b>Reordena</b> (igual que en la fórmula): 2ax + 2ay + 3bx + 3by</div>
+<div class="line"><b>Agrupa y saca factor:</b> <span class="g">2a(x + y)</span> + <span class="v">3b(x + y)</span></div>
+<div class="line"><b class="v">Respuesta:</b> (x + y)(2a + 3b)</div></div>
+
+<div class="box ex"><h3>Ejemplo 4 (con signo negativo): 6ab − 9a − 4b + 6</h3>
+<div class="line"><b>Agrupa:</b> (6ab − 9a) + (−4b + 6)</div>
+<div class="line"><b>Primera pareja:</b> <span class="g">3a(2b − 3)</span></div>
+<div class="line"><b>Segunda pareja:</b> sacamos <b>−2</b> para que el paréntesis salga igual: <span class="v">−2(2b − 3)</span></div>
+<div class="line"><b class="v">Respuesta:</b> (2b − 3)(3a − 2)</div></div>
+
+<div class="box ex"><h3>Ejemplo 5 (el 1 también cuenta): x³ + x² + x + 1</h3>
+<div class="line"><b>Agrupa:</b> (x³ + x²) + (x + 1)</div>
+<div class="line"><b>Primera pareja:</b> <span class="g">x²(x + 1)</span>. <b>Segunda pareja:</b> no se ve factor, pero se puede escribir <span class="v">1(x + 1)</span>.</div>
+<div class="line"><b class="v">Respuesta:</b> (x + 1)(x² + 1)</div></div>
+</section>
+
+<section id="errores">
+<h2><span class="n">5</span>Errores que debes evitar</h2>
+<div class="box bad"><b>Olvidar el 1.</b> Si al sacar un factor se lo llevas todo, dentro queda un 1, no un vacío. Ejemplo: x + 1 = 1(x + 1).</div>
+<div class="box bad"><b>No cambiar los signos.</b> Al sacar un factor negativo, cada signo de adentro cambia: −4b + 6 = −2(2b − 3).</div>
+<div class="box bad"><b>Quedarse a medias.</b> x(a + b) + y(a + b) todavía es una suma. La respuesta final es una multiplicación: (a + b)(x + y).</div>
+<div class="box bad"><b>Paréntesis distintos.</b> Si no coinciden, prueba otro orden de los términos o revisa los signos.</div>
+<div class="box ok"><b>Comprobación segura:</b> multiplica tus dos factores. Debe volver el polinomio original.</div>
+</section>
+
+<section id="quiz">
+<h2><span class="n">6</span>Mini examen</h2>
+<div id="quiz"></div>
+<p class="score" id="score"></p>
+</section>
+</main>
+
+<footer><div class="wrap">Busca parejas, saca lo que se repite y verás cómo el paréntesis aparece solo.</div></footer>
+
+<script>
+const Q=[
+{t:"¿Qué significa factorizar?",o:["Sumar términos","Escribir como una multiplicación","Eliminar paréntesis"],c:1,e:"Factorizar es lo contrario de multiplicar."},
+{t:"¿Cuál es el factor común de 6x + 9?",o:["2","3","6"],c:1,e:"6 = 3·2 y 9 = 3·3, así que 6x + 9 = 3(2x + 3)."},
+{t:"En ax + bx + ay + by, después de agrupar queda x(a + b) + y(a + b). ¿Qué paréntesis se repite?",o:["(x + y)","(a + b)","(a + y)"],c:1,e:"(a + b) aparece en los dos y se saca como factor común."},
+{t:"Factoriza 5x + 5y + mx + my.",o:["(x + y)(5 + m)","(5 + m)(x − y)","5m(x + y)"],c:0,e:"5(x + y) + m(x + y) = (x + y)(5 + m)."},
+{t:"Factoriza 3m² − 6mn + 4m − 8n.",o:["(m − 2n)(3m + 4)","(m + 2n)(3m − 4)","(3m − 2n)(m + 4)"],c:0,e:"3m(m − 2n) + 4(m − 2n) = (m − 2n)(3m + 4)."},
+{t:"Si sacas −2 de −4b + 6, ¿qué queda?",o:["−2(2b + 3)","−2(2b − 3)","2(−2b + 3)"],c:1,e:"Al sacar un factor negativo, cambian los signos de adentro."}
+];
+let done=0,ok=0;
+const root=document.getElementById("quiz");
+Q.forEach((q,i)=>{
+ const d=document.createElement("div");d.className="q";
+ d.innerHTML="<b>"+(i+1)+". "+q.t+"</b>";
+ const fb=document.createElement("div");fb.className="fb";
+ let answered=false;
+ q.o.forEach((txt,j)=>{
+  const b=document.createElement("button");b.type="button";b.textContent=txt;
+  b.onclick=()=>{
+   if(answered)return;answered=true;done++;
+   const all=d.querySelectorAll("button");
+   all[q.c].classList.add("right");
+   if(j===q.c){ok++;fb.textContent="¡Correcto! "+q.e;fb.style.color="var(--green)";}
+   else{b.classList.add("wrong");fb.textContent="Casi. "+q.e;fb.style.color="var(--red)";}
+   if(done===Q.length)document.getElementById("score").textContent="Resultado: "+ok+" de "+Q.length+(ok===Q.length?". ¡Ya vas camino a experto!":". Repasa el método y vuelve a intentarlo.");
+  };
+  d.appendChild(b);
+ });
+ d.appendChild(fb);root.appendChild(d);
+});
+</script>
+</body>
+</html>
